@@ -41,10 +41,12 @@ namespace od
       switch(recogtype_)
       {
         case OD_FACE_FISCHER:
-          cvrecognizer_ = cv::face::createFisherFaceRecognizer(num_components_, threshold_);
+          // cvrecognizer_ = cv::face::createFisherFaceRecognizer(num_components_, threshold_);
+          cvrecognizer_ = cv::face::FisherFaceRecognizer::create(num_components_, threshold_); 
           break;
         case OD_FACE_EIGEN:
-          cvrecognizer_ = cv::face::createEigenFaceRecognizer(num_components_, threshold_);
+          // cvrecognizer_ = cv::face::createEigenFaceRecognizer(num_components_, threshold_);
+          cvrecognizer_ = cv::face::EigenFaceRecognizer::create(num_components_, threshold_);
           break;
         default:
           std::cout << "FATAL: FACETYPE NOT FOUND!";
@@ -73,7 +75,8 @@ namespace od
         }
 
         //choose the first
-        cvrecognizer_->load(files[0]);
+        // cvrecognizer_->load(files[0]);
+        cvrecognizer_->read(files[0]);
       }
     }
 
