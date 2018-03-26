@@ -20,7 +20,7 @@ Short demo video - https://www.youtube.com/watch?v=sp8W0NspY54
 
 **Authored by Joseph Polden.**
 
-Opendetection is a great library, however installation is not so straight forward due to the required configuration of it's dependencies. What follows is a short summary of the steps taken to install the opendection package on my laptop:
+Opendetection is a great library, however installation is not so straight forward. What follows is a short summary of the steps taken to install the opendection package on my laptop:
 - Dell Precision 5520
 - Ubuntu 16.04
 - Nvidia Quadro M1200 Graphics card
@@ -36,7 +36,7 @@ Once downloaded, use the terminal to navigate to the downloaded file and run it:
 
     cd path/to/cuda_9.1.85_387.26_linux.run/
     chmod 755 cuda_9.1.85_387.26_linux.run 
-	sudo ./cuda_9.1.85_387.26_linux.run --override
+    sudo ./cuda_9.1.85_387.26_linux.run --override
 
 I made use of the "--override" suffix to bypass some initial errors I encountered (it may not be neccesary on other systems). Before installation, a script will prompt you with a few basic installation questions. Everything is fairly standard, however I did **NOT** elect to install the provided NVIDIA driver since the one currently installed on my computer is a more recent version. Below are the settings I used in my installation. After these prompts, the installation ran smoothly.
  
@@ -58,26 +58,26 @@ Openni is a required to properly configure the required PCL installation (step 3
   
 First, I installed some dependencies
 
-	sudo apt-get update
-	sudo apt-get install openjdk-9-jdk  
-	sudo apt-get install doxygen graphviz mono-complete 
+    sudo apt-get update
+    sudo apt-get install openjdk-9-jdk  
+    sudo apt-get install doxygen graphviz mono-complete 
  
 Then we cloned the openNI package, and checked out the Unstable branch (it is newer than the master). 
 
-	git clone https://github.com/OpenNI/OpenNI.git
-	cd OpenNI/
-	git checkout Unstable-1.5.4.0 
+    git clone https://github.com/OpenNI/OpenNI.git
+    cd OpenNI/
+    git checkout Unstable-1.5.4.0 
 
 Navigate to the RedistMaker file and run it. It will compile the library for you:
 
-	cd Platform/Linux/CreateRedist/
-	chmod +x RedistMaker
-	./RedistMaker
+    cd Platform/Linux/CreateRedist/
+    chmod +x RedistMaker
+    ./RedistMaker
 
 After this, navigate to the Redist directory and run the install script to install the software on your system.
   
-	cd Redist/OpenNI-Bin-Dev-Linux-x64-v1.5.4.0/Bin/x64-Release/
-	sudo ./install.sh 
+    cd Redist/OpenNI-Bin-Dev-Linux-x64-v1.5.4.0/Bin/x64-Release/
+    sudo ./install.sh 
 
 # Step 3: PCL 1.8.0
 
@@ -106,7 +106,13 @@ Not all of these additions are required dependencies, however I installed them a
 
 #  Step 4. OpenCV 3.4.0
 
-I used [this guide] as the basis to install openCV. First we download the openCV-3.4.0 and opencv_contrib tarballs (or you optionally clone them from source).
+I used [this guide] as the basis to install openCV. First, some initial packages were installed (your system will most likely already have them)
+
+    sudo apt-get install build-essential
+    sudo apt-get install cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
+    sudo apt install checkinstall auto-apt ccache
+
+Now we can get the sourced. Download the openCV-3.4.0 and opencv_contrib tarballs (or you optionally clone them from source).
 - [opencv-3.4.0.tar.gz]
 - [opencv_contrib-3.4.0.tar.gz]
 
