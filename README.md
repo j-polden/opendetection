@@ -20,7 +20,7 @@ Short demo video - https://www.youtube.com/watch?v=sp8W0NspY54
 
 **Authored by Joseph Polden.**
 
-Opendetection is a great library, however installation is not so straight forward. What follows is a short summary of the steps taken to install the opendection package on my laptop:
+Opendetection is a great library, however installation is not so straight forward. What follows is a short summary of the steps taken to install the opendetection package on my laptop:
 - Dell Precision 5520
 - Ubuntu 16.04
 - Nvidia Quadro M1200 Graphics card
@@ -38,7 +38,7 @@ Once downloaded, use the terminal to navigate to the downloaded file and run it:
     chmod 755 cuda_9.1.85_387.26_linux.run 
     sudo ./cuda_9.1.85_387.26_linux.run --override
 
-I made use of the "--override" suffix to bypass some initial errors I encountered (it may not be neccesary on other systems). Before installation, a script will prompt you with a few basic installation questions. Everything is fairly standard, however I did **NOT** elect to install the provided NVIDIA driver since the one currently installed on my computer is a more recent version. Below are the settings I used in my installation. After these prompts, the installation ran smoothly.
+I made use of the "--override" suffix to bypass some initial errors I encountered (it may not be necessary on other systems). Before installation, a script will prompt you with a few basic installation questions. Everything is fairly standard, however I did **NOT** elect to install the provided NVIDIA driver since the one currently installed on my computer is a more recent version. Below are the settings I used in my installation. After these prompts, the installation ran smoothly.
  
     Do you accept the previously read EULA? (accept/decline/quit): accept
     You are attempting to install on an unsupported configuration. Do you wish to continue? ((y)es/(n)o) [ default is no ]: y
@@ -53,13 +53,32 @@ I made use of the "--override" suffix to bypass some initial errors I encountere
     Copying samples to /usr/local/cuda-9.1/NVIDIA_CUDA-9.1_Samples now...
     Finished copying samples. 
 
+Once installed we just need to set up some config files. Use gedit to create a new document.
+
+	sudo gedit /etc/profile.d/cuda.sh
+
+and input the following onto the first line and save:
+
+	export PATH=$PATH:/usr/local/cuda/bin
+
+Create another new document:
+
+	sudo gedit /etc/ld.so.conf.d/cuda.conf
+
+and input the following onto the first line and save:
+
+	/usr/local/cuda/lib64
+
+Run the following command in the terminal to finish the process
+
+	sudo ldconfig 
+ 
 # 2. Step 2: Openni
 Openni is a required to properly configure the required PCL installation (step 3, below). I used steps 1 and 2 of [the following guide] (i did not install the kinect modules etc, for now)  
   
 First, I installed some dependencies
 
-    sudo apt-get update
-    sudo apt-get install openjdk-9-jdk  
+    sudo apt-get update 
     sudo apt-get install doxygen graphviz mono-complete 
  
 Then we cloned the openNI package, and checked out the Unstable branch (it is newer than the master). 
@@ -76,10 +95,11 @@ Navigate to the RedistMaker file and run it. It will compile the library for you
 
 After this, navigate to the Redist directory and run the install script to install the software on your system.
   
-    cd Redist/OpenNI-Bin-Dev-Linux-x64-v1.5.4.0/Bin/x64-Release/
+    cd..
+    cd Redist/OpenNI-Bin-Dev-Linux-x64-v1.5.4.0/
     sudo ./install.sh 
 
-# Step 3: PCL 1.8.0
+# Step 3: PCL 1.8.1
 
 Opendetection requires PCL 1.8 with '3d_rec_framework' enabled. To build with this setting you need to install OpenNI as well, which is the mandatory dependency for this app (refer to step 2 above).
 
@@ -101,7 +121,7 @@ Once you have specified the source and build directories in the GUI interface, c
 
 Not all of these additions are required dependencies, however I installed them all regardless. Click generate to build the makefile and once finished, exit the GUI. We can now make and install the library:
 
-    make - j8
+    make -j8
     sudo make install
 
 #  Step 4. OpenCV 3.4.0
@@ -142,10 +162,10 @@ click the configure button in the GUI, the following settings were used:
 
 Click generate to build the makefile and once finished, exit the GUI. The final step is to make and install the library:
 
-    make - j8
+    make -j8
     sudo make install
 
-Upon sucsessful installation, an openCV config file was then created:
+Upon successful installation, an openCV config file was then created:
 
     sudo /bin/bash -c 'echo "/usr/local/lib"> /etc/ld.so.conf.d/opencv.conf'
     sudo ldconfig
@@ -153,15 +173,25 @@ Upon sucsessful installation, an openCV config file was then created:
 
 # Step 5. Opendetection
 
-Now that the dependancies have been installed, we can move on to opendection. I used the same method provided in the [official documentation], with some small alterations made.
+Now that the dependencies have been installed, we can move on to opendetection. I used the same method provided in the [official documentation], with some small alterations made.
 
-First, clone the opendetection source into your home directory and create a build folder.
+First, I needed to install the pugixlm package
+
+    sudo apt-get install libpugixml-dev
+
+Then, clone the opendetection source into your home directory and create a build folder.
 
     cd <path_to_desired_download_location>
     git clone https://github.com/krips89/opendetection.git
     mkdir build; cd build
+
+Before we configure the configure the buildfiles, we must add in the required svm files, as directed by the [official documentation]. Download the SVM source files from [here], and unpack them into:
+	
+	opendetection/3rdparty/svmlight/
+
     
-from here, we use cmake-gui to update the OpenCV_DIR variable. I have ROS installed on my computer, which has its own copy of openCV packaged with it. I need to update the OpenCV_DIR varialble to point to the openCV installation done in step 4 (initially it was pointing to the openCV copy packaged with ROS). To do this, launch the cmake-gui from the build directory, click the configure button and adjust the following variable to:
+We can now use cmake-gui to generate the build file. Only one setting needed to be altered on my system, the OpenCV_DIR variable. This is becuase I have ROS installed on my computer, which has its own copy of openCV packaged with it. I need to update the OpenCV_DIR variable to point to the openCV installation done in step 4 (initially it was pointing to the openCV copy packaged with ROS). To do this, launch the cmake-gui from the build directory, click the configure button and adjust the following variable to:
+
 - OpenCV_DIR=/path/to/opencv-3.4.0/build
     
 Click generate to build the makefile and once finished, exit the GUI. Before we compile and install, we need to adjust some code in the ODFaceRecognizer.cpp file, which does not compile. Open the file in a text editor and make change the following lines:  
