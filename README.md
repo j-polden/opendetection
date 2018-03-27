@@ -185,7 +185,7 @@ Then, clone the opendetection source into your home directory and create a build
     git clone https://github.com/krips89/opendetection.git
     mkdir build; cd build
 
-Before we configure the configure the buildfiles, we must add in the required svm files, as directed by the [official documentation]. Download the SVM source files from [here], and unpack them into:
+Before we configure the buildfiles, we must add in the required svm files, as directed by the [official documentation]. Download the SVM source files from [here], and unpack them into:
 	
 	opendetection/3rdparty/svmlight/
 
@@ -227,5 +227,5 @@ Once the updates were made, opendetection library was able to compile. Navigate 
    [opencv-3.4.0.tar.gz]: <https://github.com/opencv/opencv/archive/3.4.0.tar.gz>
    [opencv_contrib-3.4.0.tar.gz]: <https://github.com/opencv/opencv_contrib/archive/3.4.0.tar.gz>
    [official documentation]: <http://opendetection.com/installation_instruction.html>
-   
+   [here]: <http://download.joachims.org/svm_light/current/svm_light.tar.gz>
    
